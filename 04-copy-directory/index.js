@@ -10,14 +10,15 @@ function copyDir() {
         fs.unlink(path.join(__dirname, 'files-copy', file.name), err => {
             if (err) throw err;
             console.log(`${file.name} is deleted from folder "files-copy".`);
-        })
-    }))
-    readdir(path.join(__dirname, 'files'), { withFileTypes: true }).then(files => files.forEach(file => {
-        fs.copyFile(path.join(__dirname, 'files', file.name), path.join(__dirname, 'files-copy', file.name), err => {
-            if (err) throw err;
-            console.log(`${file.name} is copied to folder "files-copy".`);
         });
-    }))
+    }));
+    readdir(path.join(__dirname, 'files'), { withFileTypes: true }).then(files => files.forEach(file => {
+        if (file.isFile()) {
+            fs.copyFile(path.join(__dirname, 'files', file.name), path.join(__dirname, 'files-copy', file.name), err => {
+                if (err) throw err;
+                console.log(`${file.name} is copied to folder "files-copy".`);
+            });
+        }
+    }));
 }
-
 copyDir();
